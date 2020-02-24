@@ -1,0 +1,16 @@
+{
+    "name": "mvc-framework/mvc-framework",
+    "authors": [
+        {
+            "name": "Octavian Chiorean",
+            "email": "octavian.chiorean@evozon.com"
+        }
+    ],
+    "require": {
+        "psr/http-message": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {"framework\\": "src/"}
+    }
+
+}
