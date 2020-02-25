@@ -7,10 +7,11 @@
         }
     ],
     "require": {
-        "psr/http-message": "^1.0"
+        "psr/http-message": "^1.0",
+        "psr/container": "^1.0"
     },
     "autoload": {
-        "psr-4": {"framework\\": "src/"}
+        "psr-4": {"Framework\\": "src/"}
     }
 
 }
