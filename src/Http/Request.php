@@ -2,11 +2,10 @@
 
 namespace Framework\Http;
 
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\StreamInterface;
+use Framework\Routing\Router;
 use Psr\Http\Message\UriInterface;
 
-class Request implements RequestInterface
+class Request extends Message
 
 {
     public static function createFromGlobals(): self
@@ -14,6 +13,9 @@ class Request implements RequestInterface
         // TODO:
         // look in $_GET, $_POST, $_SERVER, $_FILES, $_COOKIES and extract data into this objects properties for
         // easy access
+
+
+
         return new self();
     }
 
@@ -34,99 +36,10 @@ class Request implements RequestInterface
 
     public function getPath(){
         $url = parse_url($this->getUri());
-        return $url["path"];
+        return $url[Router::CONFIG_ROUTES_KEY_PATH];
     }
 
     // TODO: implement methods declared by RequestInterface
-
-    /**
-     * @inheritDoc
-     */
-    public function getProtocolVersion()
-    {
-        // TODO: Implement getProtocolVersion() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withProtocolVersion($version)
-    {
-        // TODO: Implement withProtocolVersion() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getHeaders()
-    {
-        // TODO: Implement getHeaders() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function hasHeader($name)
-    {
-        // TODO: Implement hasHeader() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getHeader($name)
-    {
-        // TODO: Implement getHeader() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getHeaderLine($name)
-    {
-        // TODO: Implement getHeaderLine() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withHeader($name, $value)
-    {
-        // TODO: Implement withHeader() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withAddedHeader($name, $value)
-    {
-        // TODO: Implement withAddedHeader() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withoutHeader($name)
-    {
-        // TODO: Implement withoutHeader() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getBody()
-    {
-        // TODO: Implement getBody() method.
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withBody(StreamInterface $body)
-    {
-        // TODO: Implement withBody() method.
-    }
-
     /**
      * @inheritDoc
      */
@@ -168,7 +81,7 @@ class Request implements RequestInterface
     {
         // TODO: Implement getUri() method.
 //        $uri = $_SERVER['REQUEST_URI'];
-        return "http://mvc.com/user/1/setRole/ADMIN";
+        return "http://mvc.com/user/1/setRole/ADMIN/asd";
     }
 
     /**

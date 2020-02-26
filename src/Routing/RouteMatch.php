@@ -7,19 +7,19 @@ class RouteMatch
     private $method;
     private $controllerName;
     private $actionName;
-    private $requestAttribute;
+    private $requestAttributes;
 
     public function __construct(
         string $method,
         string $controllerName,
         string $actionName,
-        array $requestAttribute
+        array $requestAttributes
     )
     {
         $this->method = $method;
         $this->controllerName = $controllerName;
         $this->actionName = $actionName;
-        $this->requestAttribute = $requestAttribute;
+        $this->requestAttributes = $requestAttributes;
     }
 
     public function getMethod(): string
@@ -49,6 +49,6 @@ class RouteMatch
     {
         //TODO: return attributes extracted from PATH_INFO
 
-        return $this->requestAttribute;
+        return $this->requestAttributes;
     }
 }
