@@ -9,7 +9,7 @@ class RouteMatch
     private $actionName;
     private $requestAttributes;
 
-    public function __construct($method,$controllerName,$actionName,$requestAttributes)
+    public function __construct($method, $controllerName, $actionName, $requestAttributes)
     {
         $this->method = $method;
         $this->controllerName = $controllerName;
@@ -26,7 +26,7 @@ class RouteMatch
     public function getControllerName(): string
     {
         //TODO: return the controller name
-        return  $this->controllerName;
+        return $this->controllerName;
     }
 
     public function getActionName(): string
@@ -43,6 +43,6 @@ class RouteMatch
 
     public function __toString()
     {
-        return $this->getMethod() . "<br>" . $this->getControllerName() . "<br>" . $this->getActionName() . "<br>" . implode(" ",$this->getRequestAttributes()) . "<br>";
+        return $this->getMethod() . "<br>" . $this->getControllerName() . "<br>" . $this->getActionName() . "<br>" . implode(" ", $this->getRequestAttributes()) . "<br>";
     }
 }

@@ -4,9 +4,15 @@ namespace Framework\Routing;
 
 use Framework\Contracts\RouterInterface;
 use Framework\Http\Request;
+use RouteNotFoundException;
 
 class Router implements RouterInterface
 {
+    const CONFIG_KEY_PATH = 'path';
+    const CONFIG_KEY_METHOD = 'method';
+    const CONFIG_KEY_ACTION = 'actionName';
+    const CONFIG_KEY_CONTROLLER = 'controllerName';
+    const CONFIG_KEY_ATTRIBUTES = 'attributes';
     private $config;
 
     public function __construct($config)
@@ -16,29 +22,48 @@ class Router implements RouterInterface
 
     public function route(Request $request): RouteMatch
     {
-        foreach ($this->config as $key => $array){
-            if(preg_match($this->createPath($array["path"]),$request->getPath()) && $array["method"] === $request->getMethod()){
+        foreach ($this->config['router']['routes'] as $routeName => $route) {
+            if ($route[self::CONFIG_KEY_METHOD] === $request->getMethod() &&
+                preg_match($this->createRegex($route), $request->getPath())) {
                 return new RouteMatch(
                     $request->getMethod(),
-                    $array["controllerName"],
-                    $array["actionName"],
-                    $this->getRequestAttributes($this->createPath($array["path"]),$request->getPath())
+                    $this->getFullControllerName($route[self::CONFIG_KEY_CONTROLLER]),
+                    $route[self::CONFIG_KEY_ACTION],
+                    $this->getRequestAttributes($this->createRegex($route), $request->getPath())
                 );
             }
         }
-        return null;
+
+        throw new RouteNotFoundException();
     }
 
-    private function getRequestAttributes(string $path,string $request): array
+    private function createRegex(array $route)
     {
-        preg_match($path,$request,$rez);
+        $path = $route[self::CONFIG_KEY_PATH];
+        foreach ($route[self::CONFIG_KEY_ATTRIBUTES] as $valueName => $regex) {
+            $path = str_replace('{' . $valueName . '}', '(?<' . $valueName . '>' . $regex . ')', $path);
+        }
 
-        return array_filter($rez, "is_string", ARRAY_FILTER_USE_KEY);
+        return $this->createPath($path);
     }
 
-    public function createPath(string $path)
+    private function getFullControllerName(string $controllername)
     {
-        return "/^" . str_replace("/","\/",$path) . "$/";
+        $namespace = $this->config['dispatcher']['controllers_namespace'] . '\\';
+        $classSuffix = $this->config['dispatcher']['controller_class_suffix'];
+
+        return $namespace . ucfirst($controllername) . $classSuffix;
     }
 
+    private function getRequestAttributes(string $path, string $request): array
+    {
+        preg_match($path, $request, $result);
+
+        return array_filter($result, 'is_string', ARRAY_FILTER_USE_KEY);
+    }
+
+    private function createPath(string $path)
+    {
+        return '/^' . str_replace('/', '\/', $path) . '$/';
+    }
 }

@@ -27,7 +27,6 @@ class Application
     public function handle(Request $request): Response
     {
         $routeMatch = $this->getRouter()->route($request);
-
         $response = $this->getDispatcher()->dispatch($routeMatch, $request);
 
         return $response;
@@ -38,13 +37,11 @@ class Application
         //TODO: obtain router from DI container and return
 
         // code below is just a placeholder
-        return new class implements RouterInterface
-        {
+        return new class implements RouterInterface {
             public function route(Request $request): RouteMatch
             {
                 throw new Exception('You need to provide a RouterInterface implementation');
             }
-
         };
     }
 
@@ -53,8 +50,7 @@ class Application
         //TODO: obtain dispatcher from DI container and return
 
         // code below is just a placeholder
-        return new class implements DispatcherInterface
-        {
+        return new class implements DispatcherInterface {
             public function dispatch(RouteMatch $routeMatch, Request $request): Response
             {
                 throw new Exception('You need to provide a DispatcherInterface implementation');

@@ -1,25 +1,45 @@
 <?php
 
+use Framework\Routing\Router;
+
 return array(
-    "User_GET" => [
-        "method" => "GET",
-        "path" => '/user',
-        "actionName" => "read",
-        "controllerName" => "Framework\Controller\UserController"
+    'dispatcher' => [
+        'controllers_namespace' => 'Application\Controller',
+        'controller_class_suffix' => 'Controller'
     ],
+    'router' => [
+        'routes' => [
+            'list_users' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/user',
+                Router::CONFIG_KEY_ACTION => 'read',
+                Router::CONFIG_KEY_CONTROLLER => 'user',
+                Router::CONFIG_KEY_ATTRIBUTES => []
+            ],
 
-    "User_Id_GET" => [
-        "method" => "GET",
-        "path" => '/user/(?<id>\d+)',
-        "actionName" => "read",
-        "controllerName" => "Framework\Controller\UserController"
-    ],
+            'view_user' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/user/{id}',
+                Router::CONFIG_KEY_ACTION => 'read',
+                Router::CONFIG_KEY_CONTROLLER => 'user',
+                Router::CONFIG_KEY_ATTRIBUTES => [
+                    'id' => '\d+'
+                ]
+            ],
 
-    "User_Id_Role_GET" => [
-        "method" => "GET",
-        "path" => '/user/(?<id>\d+)/role/(?<role>ADMIN|GUEST)',
-        "actionName" => "read",
-        "controllerName" => "Framework\Controller\UserController"
-    ],
+            'viw_user_type' => [
+                Router::CONFIG_KEY_METHOD => 'GET',
+                Router::CONFIG_KEY_PATH => '/user/{id}/role/{role}',
+                Router::CONFIG_KEY_ACTION => 'read',
+                Router::CONFIG_KEY_CONTROLLER => 'user',
+                Router::CONFIG_KEY_ATTRIBUTES => [
+                    'id' => '\d+',
+                    'role' => 'ADMIN|GUEST'
+                ]
+
+            ],
+        ]
+    ]
+
 
 );

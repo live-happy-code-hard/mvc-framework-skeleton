@@ -16,7 +16,8 @@ class Request implements RequestInterface
         return new self();
     }
 
-    public function getPath(){
+    public function getPath()
+    {
         return "/user/3/role/ADMIN";
     }
 
