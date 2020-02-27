@@ -8,9 +8,11 @@
     ],
     "require": {
         "psr/http-message": "^1.0",
-        "psr/container": "^1.0"
+        "psr/container": "^1.0",
+      "ext-mbstring": "*"
     },
     "autoload": {
-        "psr-4": {"Framework\\": "src/" }
+        "psr-4": {"Framework\\": "src/",
+                    "Application\\":  "Application/"}
     }
 }

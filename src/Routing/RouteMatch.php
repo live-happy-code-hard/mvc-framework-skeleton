@@ -19,25 +19,21 @@ class RouteMatch
 
     public function getMethod(): string
     {
-        //TODO: return GET, POST, PUT, DELETE ...
         return $this->method;
     }
 
     public function getControllerName(): string
     {
-        //TODO: return the controller name
         return $this->controllerName;
     }
 
     public function getActionName(): string
     {
-        //TODO: return the controller action
         return $this->actionName;
     }
 
     public function getRequestAttributes(): array
     {
-        //TODO: return attributes extracted from PATH_INFO
         return $this->requestAttributes;
     }
 

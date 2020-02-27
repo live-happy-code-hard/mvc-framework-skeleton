@@ -23,8 +23,10 @@ class Router implements RouterInterface
     public function route(Request $request): RouteMatch
     {
         foreach ($this->config['router']['routes'] as $routeName => $route) {
-            if ($route[self::CONFIG_KEY_METHOD] === $request->getMethod() &&
-                preg_match($this->createRegex($route), $request->getPath())) {
+            if (!$route[self::CONFIG_KEY_METHOD] === $request->getMethod()) {
+                continue;
+            }
+            if (preg_match($this->createRegex($route), $request->getPath())) {
                 return new RouteMatch(
                     $request->getMethod(),
                     $this->getFullControllerName($route[self::CONFIG_KEY_CONTROLLER]),
@@ -34,7 +36,7 @@ class Router implements RouterInterface
             }
         }
 
-        throw new RouteNotFoundException();
+        //throw new RouteNotFoundException();
     }
 
     private function createRegex(array $route)
@@ -44,7 +46,7 @@ class Router implements RouterInterface
             $path = str_replace('{' . $valueName . '}', '(?<' . $valueName . '>' . $regex . ')', $path);
         }
 
-        return $this->createPath($path);
+        return '/^' . str_replace('/', '\/', $path) . '$/';
     }
 
     private function getFullControllerName(string $controllername)
@@ -60,10 +62,5 @@ class Router implements RouterInterface
         preg_match($path, $request, $result);
 
         return array_filter($result, 'is_string', ARRAY_FILTER_USE_KEY);
-    }
-
-    private function createPath(string $path)
-    {
-        return '/^' . str_replace('/', '\/', $path) . '$/';
     }
 }

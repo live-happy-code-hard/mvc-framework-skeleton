@@ -1,8 +1,12 @@
 <?php
 
+use Framework\Renderer\Renderer;
 use Framework\Routing\Router;
 
 return array(
+    'renderer' => [
+        Renderer::CONFIG_KEY_BASE_VIEW_PATH => dirname(__DIR__) . '/views/'
+    ],
     'dispatcher' => [
         'controllers_namespace' => 'Application\Controller',
         'controller_class_suffix' => 'Controller'
@@ -20,14 +24,14 @@ return array(
             'view_user' => [
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/user/{id}',
-                Router::CONFIG_KEY_ACTION => 'read',
+                Router::CONFIG_KEY_ACTION => 'getUser',
                 Router::CONFIG_KEY_CONTROLLER => 'user',
                 Router::CONFIG_KEY_ATTRIBUTES => [
                     'id' => '\d+'
                 ]
             ],
 
-            'viw_user_type' => [
+            'view_user_type' => [
                 Router::CONFIG_KEY_METHOD => 'GET',
                 Router::CONFIG_KEY_PATH => '/user/{id}/role/{role}',
                 Router::CONFIG_KEY_ACTION => 'read',
