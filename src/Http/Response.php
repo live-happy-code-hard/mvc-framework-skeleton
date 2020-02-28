@@ -2,8 +2,28 @@
 
 namespace Framework\Http;
 
+use Psr\Http\Message\StreamInterface;
+
 class Response extends Message
 {
+    private $statusCode;
+    private $reasonPhrase;
+
+    public function __construct
+    (
+        StreamInterface $body,
+        string $protocolVersion = '',
+        array $headers = [],
+        int $statusCode = 200,
+        string $reasonPhrase =''
+    )
+    {
+        $this->statusCode= $statusCode;
+        $this->reasonPhrase = $reasonPhrase;
+        parent::__construct($protocolVersion, $headers, $body);
+    }
+
+
     public function send(): void
     {
         $this->sendHeaders();
@@ -12,22 +32,25 @@ class Response extends Message
 
     private function sendHeaders(): void
     {
-        // TODO: use header() PHP function here to send the response headers added to this response
+        foreach ($this->getHeaders() as $key => $value){
+            header($key, implode($value, ','));
+        }
     }
 
     private function sendBody(): void
     {
-        // TODO: just print the content of the response
+
+        echo $this->getBody()->getContents();
     }
 
-    // TODO: implement methods declared by ResponseInterface
 
      /**
      * @inheritDoc
      */
     public function getStatusCode()
     {
-        // TODO: Implement getStatusCode() method.
+
+        return $this->statusCode;
     }
 
     /**
@@ -35,7 +58,10 @@ class Response extends Message
      */
     public function withStatus($code, $reasonPhrase = '')
     {
-        // TODO: Implement withStatus() method.
+        $response = clone $this;
+        $response->statusCode = $code;
+
+        return $response;
     }
 
     /**
@@ -43,6 +69,10 @@ class Response extends Message
      */
     public function getReasonPhrase()
     {
-        // TODO: Implement getReasonPhrase() method.
+        if (isset($this->reasonPhrase)) {
+            return $this->reasonPhrase;
+        }
+
+        return "";
     }
 }

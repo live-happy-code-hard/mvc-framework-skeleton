@@ -20,6 +20,7 @@ class Router implements RouterInterface
     const CONFIG_CONTROLLER = "controller";
     const CONFIG_CONTROLLER_NAMESPACE = "controller_namespace";
     const CONFIG_CONTROLLER_SUFIX = "controller_suffix";
+    const CONFIG_BASE_DIR_VIEWS = "baseDirViews";
 
 
     private $config;
@@ -31,9 +32,8 @@ class Router implements RouterInterface
 
     public function route(Request $request): RouteMatch
     {
-        // TODO: Implement route() method.
         $requestPath = $request->getPath();
-        foreach ($this->config[self::CONFIG_ROUTER][self::CONFIG_ROUTES] as $item) {
+        foreach ($this->config as $item) {
             if (!($item[self::CONFIG_ROUTES_KEY_METHOD] === $request->getMethod())) {
                 continue;
             }
@@ -61,27 +61,25 @@ class Router implements RouterInterface
                 return new RouteMatch
                 (
                     $item[self::CONFIG_ROUTES_KEY_METHOD],
-//                    $this->config
-//                                [self::CONFIG_ROUTER]
-//                                [self::CONFIG_CONTROLLER]
-//                                [self::CONFIG_CONTROLLER_NAMESPACE]
-//                                .
-//                                "\\"
-//                                .
                     $item[self::CONFIG_ROUTES_KEY_CONTROLLERNAME],
-//                                .
-//                                $this->config
-//                                    [self::CONFIG_ROUTER]
-//                                    [self::CONFIG_CONTROLLER]
-//                                    [self::CONFIG_CONTROLLER_SUFIX],
                     $item[self::CONFIG_ROUTES_KEY_ACTIONNNAME],
                     $requestAttributes
                 );
             }
         }
 
-        $exception = $this->config[self::CONFIG_ROUTER][self::CONFIG_ROUTES]["notFound"];
-        throw  RouteDoesNotExistException::forMissingRoute($exception);
+        $exception = new RouteMatch
+        (
+            $this->config["notFound"][self::CONFIG_ROUTES_KEY_METHOD],
+            $this->config["notFound"][self::CONFIG_ROUTES_KEY_CONTROLLERNAME],
+            $this->config["notFound"][self::CONFIG_ROUTES_KEY_ACTIONNNAME],
+            $this->config["notFound"][self::CONFIG_ROUTES_KEY_REQESTATTRIBUTES]
+        );
+        throw  RouteDoesNotExistException::forMissingRoute
+        (
+            $exception,
+            $this->config["notFound"][self::CONFIG_ROUTES_KEY_PATH]
+        );
     }
 
     private function getRegex(string $path, array $attribute): string

@@ -11,10 +11,13 @@ class Message implements MessageInterface
 {
     private $protocolVersion;
     private $headers;
-    
-    public function __construct()
+    private $body;
+
+    public function __construct(string $protocolVersion, array $headers, StreamInterface $body)
     {
-        
+        $this->protocolVersion = $protocolVersion;
+        $this->headers = $headers;
+        $this->body = $body;
     }
 
     /**
@@ -22,7 +25,7 @@ class Message implements MessageInterface
      */
     public function getProtocolVersion()
     {
-        // TODO: Implement getProtocolVersion() method.
+
         return $this->protocolVersion;
     }
 
@@ -31,9 +34,9 @@ class Message implements MessageInterface
      */
     public function withProtocolVersion($version)
     {
-        // TODO: Implement withProtocolVersion() method.
         $message = clone $this;
         $message->protocolVersion = $version;
+
         return $message;
     }
 
@@ -42,7 +45,7 @@ class Message implements MessageInterface
      */
     public function getHeaders()
     {
-        // TODO: Implement getHeaders() method.
+
         return $this->headers;
     }
 
@@ -51,31 +54,19 @@ class Message implements MessageInterface
      */
     public function hasHeader($name)
     {
-        // TODO: Implement hasHeader() method.
-        foreach ($this->headers as $key => $value) {
-            if ($key === $name) {
-
-                return true;
-            }
-        }
-
-        return false;
+       return isset($this->headers[$name]);
     }
-        
+
     /**
      * @inheritDoc
      */
     public function getHeader($name)
     {
-        // TODO: Implement getHeader() method.
-        foreach ($this->headers as $key => $value) {
-            if ($key === $name) {
-
-                return $value;
-            }
+        if (!isset($this->headers[$name] )) {
+            return [];
         }
 
-        return [];
+        return $this->headers[$name];;
     }
 
     /**
@@ -83,7 +74,9 @@ class Message implements MessageInterface
      */
     public function getHeaderLine($name)
     {
-        // TODO: Implement getHeaderLine() method.
+        //test if key name exists
+        //
+        return $name.":".implode(", ", $this->headers[$name]);
     }
 
     /**
@@ -91,36 +84,35 @@ class Message implements MessageInterface
      */
     public function withHeader($name, $value)
     {
-        // TODO: Implement withHeader() method.
+        //make value a array
         $message = clone $this;
-        foreach ($message->headers as $key => $val){
-            if ($key === $name) {
+//        if (is_array($value)) {
+//            $message->headers[$name] = $value;
+//            return $message;
+//        }
+        $message->headers[$name] = [$value];
 
-                $message->headers[$key] = $value;
-            }
-        }
-        return $message;
-
-
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function withAddedHeader($name, $value)
-    {
-        // TODO: Implement withAddedHeader() method.
-        $message = clone $this;
-        $message->headers = array_push($message->headers, [$name => $value] );
         return $message;
     }
 
     /**
      * @inheritDoc
      */
-    public function withoutHeader($name)
+    public
+    function withAddedHeader($name, $value)
     {
-        // TODO: Implement withoutHeader() method.
+        $message = clone $this;
+        $message = array_merge($message->headers[$name], $value);
+
+        return $message;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public
+    function withoutHeader($name)
+    {
         $message = clone $this;
         unset($message->headers[$name]);
         return $message;
@@ -129,17 +121,22 @@ class Message implements MessageInterface
     /**
      * @inheritDoc
      */
-    public function getBody()
+    public
+    function getBody()
     {
-        // TODO: Implement getBody() method.
+
+        return $this->body;
     }
 
     /**
      * @inheritDoc
      */
-    public function withBody(StreamInterface $body)
+    public
+    function withBody(StreamInterface $body)
     {
-        // TODO: Implement withBody() method.
+        $message = clone $this;
+        $message->body = $body;
 
+        return $message;
     }
 }

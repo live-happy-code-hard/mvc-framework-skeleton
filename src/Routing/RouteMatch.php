@@ -9,6 +9,13 @@ class RouteMatch
     private $actionName;
     private $requestAttributes;
 
+    /**
+     * RouteMatch constructor.
+     * @param string $method
+     * @param string $controllerName
+     * @param string $actionName
+     * @param array $requestAttributes
+     */
     public function __construct(
         string $method,
         string $controllerName,
@@ -22,32 +29,38 @@ class RouteMatch
         $this->requestAttributes = $requestAttributes;
     }
 
+    /**
+     * @return string
+     */
     public function getMethod(): string
     {
-        //TODO: return GET, POST, PUT, DELETE ...
 
         return $this->method;
     }
 
+    /**
+     * @return string
+     */
     public function getControllerName(): string
     {
-        //TODO: return the controller name
 
         return $this->controllerName;
     }
 
-
+    /**
+     * @return string
+     */
     public function getActionName(): string
     {
-        //TODO: return the controller action
 
         return $this->actionName;
     }
 
-
+    /**
+     * @return array
+     */
     public function getRequestAttributes(): array
     {
-        //TODO: return attributes extracted from PATH_INFO
 
         return $this->requestAttributes;
     }

@@ -2,50 +2,93 @@
 
 namespace Framework\Http;
 
-use Framework\Routing\Router;
+use Psr\Http\Message\StreamInterface;
 use Psr\Http\Message\UriInterface;
 
 class Request extends Message
-
 {
+    private $method;
+    private $URI;
+    private $requestTarget;
+    private $parameter;
+    private $cookie;
+
+    public function __construct
+    (
+        string $protocolVersion,
+        array $headers,
+        StreamInterface $body,
+        string $method,
+        UriInterface $uri,
+        array $cookie,
+        string $requestTarget
+    )
+    {
+        $this->method = $method;
+        $this->URI = $uri;
+        $this->cookie= $cookie;
+        $this->requestTarget = $requestTarget;
+
+        parent::__construct($protocolVersion, $headers, $body);
+    }
+
     public static function createFromGlobals(): self
     {
-        // TODO:
         // look in $_GET, $_POST, $_SERVER, $_FILES, $_COOKIES and extract data into this objects properties for
         // easy access
+        $protocolVersion = $_SERVER['SERVER_PROTOCOL'];
+        $protocolVersion = explode("/", $protocolVersion);
+        $protocolVersion = $protocolVersion[1];
 
+        foreach ($_SERVER as $item => $value){
+            if( explode("_", $item)[0] == "HTTP")
+                $headers[$item] =  $value;
+        }
+        $bodyStream = fopen("php://input", "r+");
+        $stream = new Stream($bodyStream);
 
+        $uri = URI::createUriFromGlobals();
 
-        return new self();
+        $method = $_SERVER['REQUEST_METHOD'];
+
+        $cookie = $_COOKIE;
+
+        $requestTarget = $_SERVER['HTTP_HOST'];
+
+        return new self($protocolVersion, $headers, $stream, $method, $uri, $cookie, $requestTarget);
     }
 
     public function getParameter(string $name)
     {
-        //TODO
+
+        return $this->parameter[$name];
     }
 
     public function getCookie(string $name)
     {
-        //TODO
+        if (isset($this->cookie[$name])){
+            return $this->cookie[$name];
+        }
+        return [];
     }
 
-    public function moveUploadedFile(string $path)
+    public function moveUploadedFile(string $file, string $path)
     {
-        //TODO
+
+        return move_uploaded_file($file, $path);
     }
 
     public function getPath(){
-        $url = parse_url($this->getUri());
-        return $url[Router::CONFIG_ROUTES_KEY_PATH];
+
+        return $this->URI->getPath();
     }
 
-    // TODO: implement methods declared by RequestInterface
     /**
      * @inheritDoc
      */
     public function getRequestTarget()
     {
-        // TODO: Implement getRequestTarget() method.
+        return $this->requestTarget;
     }
 
     /**
@@ -53,7 +96,10 @@ class Request extends Message
      */
     public function withRequestTarget($requestTarget)
     {
-        // TODO: Implement withRequestTarget() method.
+        $request = clone $this;
+        $request->requestTarget = $requestTarget;
+
+        return $request;
     }
 
     /**
@@ -61,9 +107,8 @@ class Request extends Message
      */
     public function getMethod()
     {
-        // TODO: Implement getMethod() method.
 
-        return "GET";
+        return $this->method;
     }
 
     /**
@@ -71,7 +116,10 @@ class Request extends Message
      */
     public function withMethod($method)
     {
-        // TODO: Implement withMethod() method.
+        $request = clone $this;
+        $request->method = $method;
+
+        return $request;
     }
 
     /**
@@ -79,9 +127,8 @@ class Request extends Message
      */
     public function getUri()
     {
-        // TODO: Implement getUri() method.
-//        $uri = $_SERVER['REQUEST_URI'];
-        return "http://mvc.com/user/1/setRole/ADMIN/asd";
+
+        return $this->URI;
     }
 
     /**
@@ -89,6 +136,10 @@ class Request extends Message
      */
     public function withUri(UriInterface $uri, $preserveHost = false)
     {
-        // TODO: Implement withUri() method.
+        $request = clone $this;
+        $request->URI = $uri;
+//        if (isset($request->getHeader($preserveHost)))
+
+        return $request;
     }
 }

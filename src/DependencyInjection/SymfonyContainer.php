@@ -22,16 +22,17 @@ class SymfonyContainer implements ContainerInterface
 
     public function set(string $id, ?object $service)
     {
-        // TODO: call wrapped container
+        return $this->container->set( $id, $service);
     }
 
     public function get($id)
     {
-        // TODO: call wrapped container
+
+        return $this->container->get($id);
     }
 
     public function has($id)
     {
-        // TODO: call wrapped container
+        return $this->container->has($id);
     }
 }

@@ -19,24 +19,35 @@ class URI implements UriInterface
 
     public function __construct
     (
-        string $scheme,
-        string $user,
-        string $password,
         string $host,
-        string $port,
-        string $path,
-        string $query,
-        string $fragment
+        ?int $port = null,
+        string $path = '',
+        string $query = '',
+        string $scheme = '',
+        string $user = '',
+        string $password = '',
+        string $fragment = ''
     )
     {
         $this->scheme = $scheme;
         $this->user = $user;
         $this->password = $password;
         $this->host = $host;
-        $this->port=$port;
-        $this->path= $path;
-        $this->query= $query;
-        $this->fragment=$fragment;
+        $this->port = $port;
+        $this->path = $path;
+        $this->query = $query;
+        $this->fragment = $fragment;
+    }
+
+    public static function createUriFromGlobals()
+    {
+            $host = $_SERVER['HTTP_HOST'];
+            $port =$_SERVER['SERVER_PORT'];
+            $path =$_SERVER['REQUEST_URI'];
+            $query =$_SERVER['QUERY_STRING'];
+            $scheme =$_SERVER['REQUEST_SCHEME'];
+
+            return new self($host,$port,$path,$query,$scheme);
     }
 
     /**
@@ -44,7 +55,7 @@ class URI implements UriInterface
      */
     public function getScheme()
     {
-        // TODO: Implement getScheme() method.
+
         return $this->scheme;
     }
 
@@ -53,8 +64,8 @@ class URI implements UriInterface
      */
     public function getAuthority()
     {
-        // TODO: Implement getAuthority() method.
-        return $this->getUserInfo()."@".$this->getHost().":". $this->getPort();
+
+        return $this->getUserInfo() . "@" . $this->getHost() . ":" . $this->getPort();
     }
 
     /**
@@ -62,8 +73,8 @@ class URI implements UriInterface
      */
     public function getUserInfo()
     {
-        // TODO: Implement getUserInfo() method.
-        return $this->user.":".$this->password;
+
+        return $this->user . ":" . $this->password;
     }
 
     /**
@@ -71,7 +82,7 @@ class URI implements UriInterface
      */
     public function getHost()
     {
-        // TODO: Implement getHost() method.
+
         return $this->host;
     }
 
@@ -80,7 +91,7 @@ class URI implements UriInterface
      */
     public function getPort()
     {
-        // TODO: Implement getPort() method.
+
         return $this->port;
     }
 
@@ -89,7 +100,7 @@ class URI implements UriInterface
      */
     public function getPath()
     {
-        // TODO: Implement getPath() method.
+
         return $this->path;
     }
 
@@ -98,7 +109,7 @@ class URI implements UriInterface
      */
     public function getQuery()
     {
-        // TODO: Implement getQuery() method.
+
         return $this->query;
     }
 
@@ -107,7 +118,7 @@ class URI implements UriInterface
      */
     public function getFragment()
     {
-        // TODO: Implement getFragment() method.
+
         return $this->fragment;
     }
 
@@ -116,7 +127,6 @@ class URI implements UriInterface
      */
     public function withScheme($scheme)
     {
-        // TODO: Implement withScheme() method.
         $uri = clone $this;
         $uri->scheme = $scheme;
 
@@ -128,7 +138,6 @@ class URI implements UriInterface
      */
     public function withUserInfo($user, $password = null)
     {
-        // TODO: Implement withUserInfo() method.
         $uri = clone $this;
         $uri->user = $user;
         $uri->password = $password;
@@ -141,7 +150,6 @@ class URI implements UriInterface
      */
     public function withHost($host)
     {
-        // TODO: Implement withHost() method.
         $uri = clone $this;
         $uri->host = $host;
 
@@ -153,7 +161,6 @@ class URI implements UriInterface
      */
     public function withPort($port)
     {
-        // TODO: Implement withPort() method.
         $uri = clone $this;
         $uri->port = $port;
 
@@ -166,7 +173,6 @@ class URI implements UriInterface
      */
     public function withPath($path)
     {
-        // TODO: Implement withPath() method.
         $uri = clone $this;
         $uri->path = $path;
 
@@ -179,7 +185,6 @@ class URI implements UriInterface
      */
     public function withQuery($query)
     {
-        // TODO: Implement withQuery() method.
         $uri = clone $this;
         $uri->query = $query;
 
@@ -191,7 +196,6 @@ class URI implements UriInterface
      */
     public function withFragment($fragment)
     {
-        // TODO: Implement withFragment() method.
         $uri = clone $this;
         $uri->fragment = $fragment;
 
@@ -203,7 +207,7 @@ class URI implements UriInterface
      */
     public function __toString()
     {
-        // TODO: Implement __toString() method.
-        return $this->getScheme()."://".$this->getAuthority().$this->getPath()."?".$this->getQuery()."#".$this->getFragment();
+        //validation
+        return $this->getScheme() . "://" . $this->getAuthority() . $this->getPath() . "?" . $this->getQuery() . "#" . $this->getFragment();
     }
 }

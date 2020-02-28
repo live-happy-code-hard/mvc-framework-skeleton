@@ -1,9 +1,7 @@
 <?php
 namespace Framework\Exceptions;
 
-use Framework\Routing\Router;
-use http\Message;
-use Throwable;
+use Framework\Routing\RouteMatch;
 
 class RouteDoesNotExistException extends \Exception
 {
@@ -11,35 +9,28 @@ class RouteDoesNotExistException extends \Exception
     private $method;
     private $controllerName;
     private $path;
+    protected $message;
     private $error;
 
-    public function __construct(array $error)
+    public function __construct(RouteMatch $error)
     {
+        $this->setAttribute($error);
         $this->error = $error;
-        parent::__construct($message, $code = 404, $previous = null);
+        parent::__construct($this->message, $code = 404, $previous = null);
     }
 
-    public static function forMissingRoute(array $exception) : self {
-        new RouteDoesNotExistException($exception);
+    public static function forMissingRoute(RouteMatch $exception, string $path){
+
+        return new self($exception);
     }
 
-    private function setAttribute(array $exception){
+    private function setAttribute(RouteMatch $exception){
         $this->message = $this->createMessage();
-        $this->method = $exception[Router::CONFIG_ROUTES_KEY_METHOD];
-        $this->controllerName = $exception[Router::CONFIG_ROUTES_KEY_CONTROLLERNAME];
-        $this->actionName = $exception[Router::CONFIG_ROUTES_KEY_ACTIONNNAME];
-        $this->path = $exception[Router::CONFIG_ROUTES_KEY_PATH];
+        $this->method = $exception->getMethod();
+        $this->controllerName = $exception->getControllerName();
+        $this->actionName = $exception->getActionName();
     }
 
-    /**
-     * @return mixed
-     */
-
-
-//    public function getFile()
-//    {
-//
-//    }
     /**
      * @return mixed
      */

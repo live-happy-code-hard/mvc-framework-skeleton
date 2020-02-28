@@ -9,20 +9,23 @@ use Framework\Exceptions\RouteDoesNotExistException;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Routing\RouteMatch;
+use Framework\Contracts\ContainerInterface;
 
 class Application
 {
-    public function __construct(Framework\Contracts\ContainerInterface $container)
+    private $container;
+
+    public function __construct(ContainerInterface $container)
     {
-        // TODO
+        $this->container = $container;
     }
 
-    public static function create(Framework\Contracts\ContainerInterface $container): self
+    public static function create(ContainerInterface $container): self
     {
-        // TODO:
-        // implement the constructor and make sure that the statically created app is also added to the container
-        // for later usage
-        return new self($container);
+        $aplication = new self($container);
+//        $container->set(self::class, $aplication);
+
+        return $aplication;
     }
 
     public function handle(Request $request): Response
@@ -45,28 +48,11 @@ class Application
 
     private function getRouter(): RouterInterface
     {
-        //TODO: obtain router from DI container and return
-
-        // code below is just a placeholder
-        return new class implements RouterInterface {
-            public function route(Request $request): RouteMatch
-            {
-                throw new Exception('You need to provide a RouterInterface implementation');
-            }
-
-        };
+        return $this->container->get(RouterInterface::class);
     }
 
     private function getDispatcher(): DispatcherInterface
     {
-        //TODO: obtain dispatcher from DI container and return
-
-        // code below is just a placeholder
-        return new class implements DispatcherInterface {
-            public function dispatch(RouteMatch $routeMatch, Request $request): Response
-            {
-                throw new Exception('You need to provide a DispatcherInterface implementation');
-            }
-        };
+        return $this->container->get(DispatcherInterface::class);
     }
 }
