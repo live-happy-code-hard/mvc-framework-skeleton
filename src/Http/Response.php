@@ -2,12 +2,22 @@
 
 namespace Framework\Http;
 
+use Framework\Exceptions\StreamNotFoundException;
 use Psr\Http\Message\ResponseInterface;
 
 class Response extends Message implements ResponseInterface
 {
+    /**
+     * @var int
+     */
     private $statusCode;
 
+    /**
+     * Response constructor.
+     * @param $body
+     * @param string $protocolVersion
+     * @param int $statusCode
+     */
     public function __construct($body, $protocolVersion = "1.1", $statusCode = 200)
     {
         parent::__construct($protocolVersion, $body);
@@ -22,14 +32,18 @@ class Response extends Message implements ResponseInterface
 
     private function sendHeaders(): void
     {
-        foreach ($this->headers as $key => $value){
-            header($key . ": " . implode($value,','));
+        foreach ($this->headers as $key => $value) {
+            header($key . ": " . implode(',', $value));
         }
     }
 
     private function sendBody(): void
     {
-        echo $this->getBody()->getContents();
+        try {
+            echo $this->getBody()->getContents();
+        } catch (StreamNotFoundException $e) {
+            $e->getMessage();
+        }
     }
 
     /**

@@ -16,6 +16,10 @@ abstract class AbstractController
      */
     protected $renderer;
 
+    /**
+     * AbstractController constructor.
+     * @param RendererInterface $renderer
+     */
     public function __construct(RendererInterface $renderer)
     {
         // Rendered gets constructor injected

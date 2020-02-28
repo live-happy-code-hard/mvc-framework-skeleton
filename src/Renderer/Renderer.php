@@ -1,21 +1,35 @@
 <?php
 
 namespace Framework\Renderer;
+
 use Framework\Contracts\RendererInterface;
 use Framework\Http\Response;
 use Framework\Http\Stream;
 
 class Renderer implements RendererInterface
 {
+
     const CONFIG_KEY_BASE_VIEW_PATH = "base_view_path";
+
+    /**
+     * @var string
+     */
     private $baseViewsPath;
 
-
+    /**
+     * Renderer constructor.
+     * @param string $baseViewsPath
+     */
     public function __construct(string $baseViewsPath)
     {
         $this->baseViewsPath = $baseViewsPath;
     }
 
+    /**
+     * @param string $viewFile
+     * @param array $arguments
+     * @return Response
+     */
     public function renderView(string $viewFile, array $arguments): Response
     {
         $fullPath = $this->baseViewsPath . $viewFile;
@@ -28,7 +42,7 @@ class Renderer implements RendererInterface
 
         $content = ob_get_contents();
 
-        ob_get_clean();
+        ob_end_clean();
 
         $stream = Stream::createFromString($content);
         $response = new Response($stream);
@@ -36,6 +50,10 @@ class Renderer implements RendererInterface
         return $response;
     }
 
+    /**
+     * @param array $data
+     * @return Response
+     */
     public function renderJson(array $data): Response
     {
         $json = json_encode($data);

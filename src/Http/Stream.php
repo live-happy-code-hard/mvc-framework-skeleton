@@ -3,6 +3,7 @@
 
 namespace Framework\Http;
 
+use Framework\Exceptions\StreamNotFoundException;
 use Psr\Http\Message\StreamInterface;
 
 class Stream implements StreamInterface
@@ -40,7 +41,7 @@ class Stream implements StreamInterface
      * @param $handler
      * @param int|null $size
      */
-    public function __construct($handler,int $size = null)
+    public function __construct($handler, ?int $size = null)
     {
         $this->stream = $handler;
         $this->size = $size;
@@ -54,17 +55,19 @@ class Stream implements StreamInterface
     public static function createFromString(string $content): self
     {
         $stream = fopen(sprintf("php://temp/maxmemory:%s", self::DEFAULT_MEMORY), self::DEFAULT_MODE);
-        fwrite($stream,$content);
-        return new self($stream,strlen($content));
+        fwrite($stream, $content);
+
+        return new self($stream, strlen($content));
     }
 
     /**
      * @inheritDoc
+     * @throws StreamNotFoundException
      */
     public function __toString()
     {
-        if(!isset($this->stream)){
-            throw new \RuntimeException("Stream not found");
+        if (!isset($this->stream)) {
+            throw new StreamNotFoundException("Stream not found");
         }
         $this->rewind();
         fread($this->stream, $this->size);
@@ -72,12 +75,13 @@ class Stream implements StreamInterface
 
     /**
      * @inheritDoc
+     * @throws StreamNotFoundException
      */
     public function close()
     {
         $this->writable = $this->readable = $this->seekable = false;
-        if(!isset($this->stream)){
-            throw new \RuntimeException("Stream not found");
+        if (!isset($this->stream)) {
+            throw new StreamNotFoundException("Stream not found");
         }
         fclose($this->stream);
     }
@@ -109,11 +113,12 @@ class Stream implements StreamInterface
 
     /**
      * @inheritDoc
+     * @throws StreamNotFoundException
      */
     public function tell()
     {
         if (!isset($this->stream)) {
-            throw new \RuntimeException("Stream not found");
+            throw new StreamNotFoundException("Stream not found");
         }
 
         return ftell($this->stream);
@@ -121,11 +126,12 @@ class Stream implements StreamInterface
 
     /**
      * @inheritDoc
+     * @throws StreamNotFoundException
      */
     public function eof()
     {
         if (!isset($this->stream)) {
-            throw new \RuntimeException("Stream not found");
+            throw new StreamNotFoundException("Stream not found");
         }
 
         return feof($this->stream);
@@ -141,23 +147,24 @@ class Stream implements StreamInterface
 
     /**
      * @inheritDoc
+     * @throws StreamNotFoundException
      */
     public function seek($offset, $whence = SEEK_SET)
     {
-        if(!isset($this->stream)){
-            throw new \RuntimeException("Stream not found");
+        if (!isset($this->stream)) {
+            throw new StreamNotFoundException("Stream not found");
         }
-
         fseek($this->stream, $offset, $whence);
     }
 
     /**
      * @inheritDoc
+     * @throws StreamNotFoundException
      */
     public function rewind()
     {
-        if(!isset($this->stream)){
-            throw new \RuntimeException("Stream not found");
+        if (!isset($this->stream)) {
+            throw new StreamNotFoundException("Stream not found");
         }
 
         fseek($this->stream, 0);
@@ -192,11 +199,12 @@ class Stream implements StreamInterface
 
     /**
      * @inheritDoc
+     * @throws StreamNotFoundException
      */
     public function read($length)
     {
-        if(!isset($this->stream)){
-            throw new \RuntimeException("Stream not found");
+        if (!isset($this->stream)) {
+            throw new StreamNotFoundException("Stream not found");
         }
 
         return fread($this->stream, $length);
@@ -204,12 +212,13 @@ class Stream implements StreamInterface
 
     /**
      * @inheritDoc
+     * @throws StreamNotFoundException
      */
     public function getContents()
     {
         $this->rewind();
-        if(!isset($this->stream)){
-            throw new \RuntimeException("Stream not found");
+        if (!isset($this->stream)) {
+            throw new StreamNotFoundException("Stream not found");
         }
 
         return stream_get_contents($this->stream);
@@ -217,11 +226,12 @@ class Stream implements StreamInterface
 
     /**
      * @inheritDoc
+     * @throws StreamNotFoundException
      */
     public function getMetadata($key = null)
     {
-        if(!isset($this->stream)){
-            throw new \RuntimeException("Stream not found");
+        if (!isset($this->stream)) {
+            throw new StreamNotFoundException("Stream not found");
         }
 
         return stream_get_meta_data($this->stream);

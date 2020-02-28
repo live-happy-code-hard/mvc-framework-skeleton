@@ -65,9 +65,9 @@ class Uri implements UriInterface
         ?int $port,
         string $path,
         string $query,
-        string $user='',
-        string $password='',
-        string $fragment='')
+        string $user = '',
+        string $password = '',
+        string $fragment = '')
     {
         $this->scheme = $scheme;
         $this->user = $user;
@@ -79,15 +79,18 @@ class Uri implements UriInterface
         $this->fragment = $fragment;
     }
 
+    /**
+     * @return Uri
+     */
     public static function createFromGlobals()
     {
         $scheme = $_SERVER["REQUEST_SCHEME"];
         $host = $_SERVER["HTTP_HOST"];
         $port = intval($_SERVER["SERVER_PORT"]);
-        $path = explode('?',$_SERVER["REQUEST_URI"])[0];
+        $path = $_SERVER["REQUEST_URI"];
         $query = $_SERVER["QUERY_STRING"];
 
-        return new self($scheme, $host, $port,$path,$query);
+        return new self($scheme, $host, $port, $path, $query);
     }
 
     /**
@@ -111,6 +114,7 @@ class Uri implements UriInterface
         if ($this->getPort()) {
             $authority .= ':' . $this->getPort();
         }
+
         return $authority;
     }
 

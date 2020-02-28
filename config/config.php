@@ -31,16 +31,26 @@ return array(
                 ]
             ],
 
-            'view_user_type' => [
-                Router::CONFIG_KEY_METHOD => 'GET',
-                Router::CONFIG_KEY_PATH => '/user/{id}/role/{role}',
-                Router::CONFIG_KEY_ACTION => 'read',
+            'give_user_role_priority' => [
+                Router::CONFIG_KEY_METHOD => 'POST',
+                Router::CONFIG_KEY_PATH => '/user/{id}/role/{role}\?p={priority}',
+                Router::CONFIG_KEY_ACTION => 'giveRolePriority',
                 Router::CONFIG_KEY_CONTROLLER => 'user',
                 Router::CONFIG_KEY_ATTRIBUTES => [
                     'id' => '\d+',
-                    'role' => 'ADMIN|GUEST'
+                    'role' => 'ADMIN|GUEST',
+                    'priority' => '\d+'
                 ]
+            ],
 
+            'delete_user' => [
+                Router::CONFIG_KEY_METHOD => 'DELETE',
+                Router::CONFIG_KEY_PATH => '/user/{id}',
+                Router::CONFIG_KEY_ACTION => 'deleteUser',
+                Router::CONFIG_KEY_CONTROLLER => 'user',
+                Router::CONFIG_KEY_ATTRIBUTES => [
+                    'id' => '\d+'
+                ]
             ],
         ]
     ]

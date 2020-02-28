@@ -31,9 +31,7 @@ class Message implements MessageInterface
      * @param $headers
      * @param $body
      */
-    public function __construct(
-        $protocolVersion,
-        $body)
+    public function __construct($protocolVersion, $body)
     {
         $this->protocolVersion = $protocolVersion;
         $this->headers = [];
@@ -72,7 +70,7 @@ class Message implements MessageInterface
      */
     public function hasHeader($name)
     {
-        return array_key_exists($name,$this->headers);
+        return array_key_exists($name, $this->headers);
     }
 
     /**
@@ -80,7 +78,7 @@ class Message implements MessageInterface
      */
     public function getHeader($name)
     {
-        return preg_split('/,/',$this->headers[$name]);
+        return preg_split('/,/', $this->headers[$name]);
     }
 
     /**
@@ -97,7 +95,7 @@ class Message implements MessageInterface
     public function withHeader($name, $value)
     {
         $request = clone $this;
-        $request->headers[$name] = (array) $value;
+        $request->headers[$name] = (array)$value;
 
         return $request;
     }
@@ -108,7 +106,7 @@ class Message implements MessageInterface
     public function withAddedHeader($name, $value)
     {
         $request = clone $this;
-        $request->headers = array_merge($this->headers[$name],$value);
+        $request->headers = array_merge($this->headers[$name], $value);
 
         return $request;
     }
@@ -128,6 +126,7 @@ class Message implements MessageInterface
     {
         $name = ucwords(strtolower(strtr(substr($name, 5), '_', '-')), '-');
         $this->headers[$name] = explode(',', $value);
+
         return $this;
     }
 

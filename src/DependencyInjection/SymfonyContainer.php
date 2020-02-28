@@ -20,18 +20,31 @@ class SymfonyContainer implements ContainerInterface
         $this->container = $container;
     }
 
+    /**
+     * @param string $id
+     * @param object|null $service
+     * @return mixed
+     */
     public function set(string $id, ?object $service)
     {
-        // TODO: call wrapped container
+        return $this->container->set($id, $service);
     }
 
+    /**
+     * @param string $id
+     * @return mixed|object|null
+     */
     public function get($id)
     {
-        // TODO: call wrapped container
+        return $this->container->get($id);
     }
 
+    /**
+     * @param string $id
+     * @return bool
+     */
     public function has($id)
     {
-        // TODO: call wrapped container
+        return $this->container->has($id);
     }
 }
