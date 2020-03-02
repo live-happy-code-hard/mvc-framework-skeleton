@@ -41,13 +41,28 @@ class URI implements UriInterface
 
     public static function createUriFromGlobals()
     {
-            $host = $_SERVER['HTTP_HOST'];
-            $port =$_SERVER['SERVER_PORT'];
-            $path =$_SERVER['REQUEST_URI'];
-            $query =$_SERVER['QUERY_STRING'];
-            $scheme =$_SERVER['REQUEST_SCHEME'];
+        $host = $_SERVER['HTTP_HOST'];
 
-            return new self($host,$port,$path,$query,$scheme);
+        if (isset($_SERVER['SERVER_PORT'])) {
+            $port = $_SERVER['SERVER_PORT'];
+        }
+        if (isset($_SERVER['REQUEST_URI'])) {
+            $path = parse_url($_SERVER['REQUEST_URI'])['path'];
+        }
+        if (isset($_SERVER['QUERY_STRING'])) {
+            $query = $_SERVER['QUERY_STRING'];
+        }
+        if (isset($_SERVER['REQUEST_SCHEME'])) {
+            $scheme = $_SERVER['REQUEST_SCHEME'];
+        }
+        if (isset($_SERVER['REQUEST_SCHEME'])) {
+            $scheme = $_SERVER['REQUEST_SCHEME'];
+        }
+        if (isset($_SERVER['REQUEST_SCHEME'])) {
+            $scheme = $_SERVER['REQUEST_SCHEME'];
+        }
+
+        return new self($host, $port, $path, $query, $scheme);
     }
 
     /**

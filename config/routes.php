@@ -54,8 +54,6 @@ return array(
                 Router::CONFIG_ROUTES_KEY_REQESTATTRIBUTES => [
                     "id" => "\d+",
                     "role" => "ADMIN|GUEST",
-                    "p" => "\d+"
-
                 ]
             ]
         ]

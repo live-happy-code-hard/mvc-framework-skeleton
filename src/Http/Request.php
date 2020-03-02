@@ -21,13 +21,15 @@ class Request extends Message
         string $method,
         UriInterface $uri,
         array $cookie,
-        string $requestTarget
+        string $requestTarget,
+        array $parameter
     )
     {
         $this->method = $method;
         $this->URI = $uri;
         $this->cookie= $cookie;
         $this->requestTarget = $requestTarget;
+        $this->parameter = $parameter;
 
         parent::__construct($protocolVersion, $headers, $body);
     }
@@ -55,7 +57,9 @@ class Request extends Message
 
         $requestTarget = $_SERVER['HTTP_HOST'];
 
-        return new self($protocolVersion, $headers, $stream, $method, $uri, $cookie, $requestTarget);
+        $parameter = $_GET;
+
+        return new self($protocolVersion, $headers, $stream, $method, $uri, $cookie, $requestTarget, $parameter);
     }
 
     public function getParameter(string $name)

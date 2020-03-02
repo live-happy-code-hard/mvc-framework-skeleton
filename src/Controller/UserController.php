@@ -18,6 +18,15 @@ class UserController extends AbstractController
     }
 
     public function postUser(Request $request, array $requestAttributes){
-        return $this->renderer->renderJson($requestAttributes);
+        $requestAttributes["p"] = $request->getParameter("p");
+        $requestAttributes["body"] = $request->getBody()->getContents();
+
+        return $this->renderer->renderView('/userPost.phtml',$requestAttributes);
+    }
+
+    public function deleteUser(Request $request, array $requestAttributes){
+
+        $sendArray["message"] = "Delete user with id ".$requestAttributes["id"];
+        return $this->renderer->renderJson($sendArray);
     }
 }
