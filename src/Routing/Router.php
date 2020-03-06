@@ -54,10 +54,11 @@ class Router implements RouterInterface
     private function createRegex(array $route)
     {
         $path = $route[self::CONFIG_KEY_PATH];
-        foreach ($route[self::CONFIG_KEY_ATTRIBUTES] as $valueName => $regex) {
-            $path = str_replace('{' . $valueName . '}', '(?<' . $valueName . '>' . $regex . ')', $path);
+        if (self::CONFIG_KEY_ATTRIBUTES) {
+            foreach ($route[self::CONFIG_KEY_ATTRIBUTES] as $valueName => $regex) {
+                $path = str_replace('{' . $valueName . '}', '(?<' . $valueName . '>' . $regex . ')', $path);
+            }
         }
-
         return '/^' . str_replace('/', '\/', $path) . '$/';
     }
 

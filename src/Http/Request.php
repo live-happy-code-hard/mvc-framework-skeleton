@@ -24,6 +24,9 @@ class Request extends Message implements RequestInterface
      */
     private $requestTarget;
 
+
+    private $parameters;
+
     /**
      * Request constructor.
      * @param string $protocolVersion
@@ -36,12 +39,14 @@ class Request extends Message implements RequestInterface
         string $protocolVersion,
         string $httpMethod,
         UriInterface $uri,
-        StreamInterface $body
+        StreamInterface $body,
+        array $parameters
     )
     {
         parent::__construct($protocolVersion, $body);
         $this->method = $httpMethod;
         $this->uri = $uri;
+        $this->parameters = $parameters;
     }
 
     /**
@@ -53,8 +58,8 @@ class Request extends Message implements RequestInterface
         $httpMethod = $_SERVER['REQUEST_METHOD'];
         $uri = Uri::createFromGlobals();
         $body = new Stream(fopen('php://input', 'r'));
-
-        $request = new self($protocolVersion, $httpMethod, $uri, $body);
+        $parameters = array_merge($_GET,$_POST);
+        $request = new self($protocolVersion, $httpMethod, $uri, $body, $parameters);
         foreach ($_SERVER as $variableName => $variableValue) {
             if (strpos($variableName, 'HTTP_') !== 0) {
                 continue;
@@ -79,7 +84,7 @@ class Request extends Message implements RequestInterface
      */
     public function getParameter(string $name)
     {
-        return $_GET[$name];
+        return $this->parameters[$name];
     }
 
     /**

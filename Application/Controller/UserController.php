@@ -21,6 +21,7 @@ class UserController extends AbstractController
      * @param Request $request
      * @param array $requestAttributes
      * @return Response
+     * @throws \Framework\Exceptions\StreamNotFoundException
      */
     public function giveRolePriority(Request $request,array $requestAttributes){
         $message = $request->getBody()->getContents();
