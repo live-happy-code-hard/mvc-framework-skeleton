@@ -87,7 +87,7 @@ class Uri implements UriInterface
         $scheme = $_SERVER["REQUEST_SCHEME"];
         $host = $_SERVER["HTTP_HOST"];
         $port = intval($_SERVER["SERVER_PORT"]);
-        $path = $_SERVER["REQUEST_URI"];
+        $path = explode('?',$_SERVER["REQUEST_URI"])[0];
         $query = $_SERVER["QUERY_STRING"];
 
         return new self($scheme, $host, $port, $path, $query);
