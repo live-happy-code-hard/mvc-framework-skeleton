@@ -33,6 +33,7 @@ class Request extends Message implements RequestInterface
      * @param string $httpMethod
      * @param UriInterface $uri
      * @param StreamInterface $body
+     * @param array $parameters
      */
     public function __construct
     (

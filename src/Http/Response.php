@@ -12,16 +12,20 @@ class Response extends Message implements ResponseInterface
      */
     private $statusCode;
 
+    private $location;
+
     /**
      * Response constructor.
      * @param $body
      * @param string $protocolVersion
      * @param int $statusCode
+     * @param null $location
      */
-    public function __construct($body, $protocolVersion = "1.1", $statusCode = 200)
+    public function __construct($body, $protocolVersion = "1.1", $statusCode = 200, $location = null)
     {
         parent::__construct($protocolVersion, $body);
         $this->statusCode = $statusCode;
+        $this->location = $location;
     }
 
     public function send(): void
@@ -32,8 +36,13 @@ class Response extends Message implements ResponseInterface
 
     private function sendHeaders(): void
     {
-        foreach ($this->headers as $key => $value) {
-            header($key . ": " . implode(',', $value));
+        if ($this->location) {
+            header($this->location);
+        }
+        if ($this->headers) {
+            foreach ($this->headers as $key => $value) {
+                header($key . ": " . implode(',', $value));
+            }
         }
     }
 

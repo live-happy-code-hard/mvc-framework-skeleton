@@ -9,6 +9,7 @@ use Framework\Contracts\RouterInterface;
 use Framework\Http\Request;
 use Framework\Http\Response;
 use Framework\Routing\RouteMatch;
+use Framework\Session\Session;
 
 class Application
 {
@@ -30,6 +31,10 @@ class Application
     public function handle(Request $request): Response
     {
         $routeMatch = $this->getRouter()->route($request);
+        if ($routeMatch){
+            $session = new Session();
+            $session->start();
+        }
         $response = $this->getDispatcher()->dispatch($routeMatch, $request);
 
         return $response;

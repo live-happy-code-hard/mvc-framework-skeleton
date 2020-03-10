@@ -1,7 +1,9 @@
 <?php
 
 namespace Application\Controller;
+
 use Framework\Controller\AbstractController;
+use Framework\Exceptions\StreamNotFoundException;
 use Framework\Http\Request;
 use Framework\Http\Response;
 
@@ -12,22 +14,24 @@ class UserController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function getUser(Request $request,array $requestAttributes){
+    public function getUser(Request $request, array $requestAttributes)
+    {
 
-       return $this->renderer->renderView("user.phtml",$requestAttributes);
+        return $this->renderer->renderView("user.phtml", $requestAttributes);
     }
 
     /**
      * @param Request $request
      * @param array $requestAttributes
      * @return Response
-     * @throws \Framework\Exceptions\StreamNotFoundException
+     * @throws StreamNotFoundException
      */
-    public function giveRolePriority(Request $request,array $requestAttributes){
+    public function giveRolePriority(Request $request, array $requestAttributes)
+    {
         $message = $request->getBody()->getContents();
-        $requestAttributesWithBody = array_merge($requestAttributes,['message' => $message]);
+        $requestAttributesWithBody = array_merge($requestAttributes, ['message' => $message]);
 
-        return $this->renderer->renderView("userRole.phtml",$requestAttributesWithBody);
+        return $this->renderer->renderView("userRole.phtml", $requestAttributesWithBody);
     }
 
     /**
@@ -35,7 +39,8 @@ class UserController extends AbstractController
      * @param array $requestAttributes
      * @return Response
      */
-    public function deleteUser(Request $request,array $requestAttributes){
+    public function deleteUser(Request $request, array $requestAttributes)
+    {
         return $this->renderer->renderJson($requestAttributes);
     }
 
