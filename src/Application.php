@@ -5,6 +5,7 @@ namespace Framework;
 use Exception;
 use Framework\Contracts\DispatcherInterface;
 use Framework\Contracts\RouterInterface;
+use Framework\Contracts\SessionInterface;
 use Framework\Exceptions\RouteDoesNotExistException;
 use Framework\Http\Request;
 use Framework\Http\Response;
@@ -42,7 +43,8 @@ class Application
             );
         }
         $response = $this->getDispatcher()->dispatch($routeMatch, $request);
-
+        $sesion = $this->container->get(SessionInterface::class);
+        $sesion->start();
         return $response;
     }
 

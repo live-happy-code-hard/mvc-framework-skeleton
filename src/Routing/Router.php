@@ -57,6 +57,9 @@ class Router implements RouterInterface
                         $requestAttributes[$key] = $value;
                     }
                 }
+                foreach ($request->getAllParameter() as $key => $value){
+                    $requestAttributes[$key] = $value;
+                }
 
                 return new RouteMatch
                 (

@@ -33,7 +33,7 @@ class Response extends Message
     private function sendHeaders(): void
     {
         foreach ($this->getHeaders() as $key => $value){
-            header($key, implode($value, ','));
+            header($key. ": ". implode($value, ','));
         }
     }
 
@@ -44,7 +44,7 @@ class Response extends Message
     }
 
 
-     /**
+    /**
      * @inheritDoc
      */
     public function getStatusCode()

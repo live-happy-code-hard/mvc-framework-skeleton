@@ -54,7 +54,7 @@ class Message implements MessageInterface
      */
     public function hasHeader($name)
     {
-       return isset($this->headers[$name]);
+        return isset($this->headers[$name]);
     }
 
     /**
@@ -101,6 +101,7 @@ class Message implements MessageInterface
     public
     function withAddedHeader($name, $value)
     {
+        //TODO: FIX
         $message = clone $this;
         $message = array_merge($message->headers[$name], $value);
 

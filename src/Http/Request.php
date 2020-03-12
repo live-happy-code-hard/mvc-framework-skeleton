@@ -56,15 +56,26 @@ class Request extends Message
         $cookie = $_COOKIE;
 
         $requestTarget = $_SERVER['HTTP_HOST'];
-
-        $parameter = $_GET;
+        $parameter =[];
+        if (!empty($_GET)){
+            foreach ($_GET as $item => $value){
+                $parameter[$item] = $value;
+            }
+        }
+        if (!empty($_POST)){
+            foreach ($_POST as $item => $value){
+                $parameter[$item] = $value;
+            }
+        }
 
         return new self($protocolVersion, $headers, $stream, $method, $uri, $cookie, $requestTarget, $parameter);
+    }
+    public function getAllParameter(){
+        return $this->parameter;
     }
 
     public function getParameter(string $name)
     {
-
         return $this->parameter[$name];
     }
 
