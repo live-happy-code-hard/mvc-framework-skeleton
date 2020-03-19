@@ -80,6 +80,14 @@ class Request extends Message implements RequestInterface
     }
 
     /**
+     * @return array
+     */
+    public function getParameters()
+    {
+        return $this->parameters;
+    }
+
+    /**
      * @param string $name
      * @return mixed
      */
