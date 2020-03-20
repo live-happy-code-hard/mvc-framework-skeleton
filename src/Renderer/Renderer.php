@@ -11,10 +11,12 @@ use Framework\Http\Stream;
 class Renderer implements RendererInterface
 {
     private $baseViewsPath;
+    private $template;
 
-    public function __construct(string $baseViewsPath)
+    public function __construct(string $baseViewsPath, string $template)
     {
         $this->baseViewsPath =$baseViewsPath;
+        $this->template = $template;
     }
 
     /**
@@ -22,13 +24,11 @@ class Renderer implements RendererInterface
      */
     public function renderView(string $viewFile, array $arguments): Response
     {
-        $fullPath = $this->baseViewsPath . $viewFile;
-
         ob_start();
 
         extract($arguments);
-
-        require $fullPath;
+        $fullPath = $this->baseViewsPath . $viewFile;
+        require $this->template;
 
         $content = ob_get_contents();
 
@@ -47,7 +47,6 @@ class Renderer implements RendererInterface
      */
     public function renderJson(array $data): Response
     {
-        // TODO: Implement renderJson() method.
         $json = json_encode($data);
         $stream = Stream::createFromString($json);
         $response = new Response($stream);

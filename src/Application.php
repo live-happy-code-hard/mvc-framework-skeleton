@@ -42,9 +42,10 @@ class Application
                 []
             );
         }
+        $session = $this->container->get(SessionInterface::class);
+        $session->start();
         $response = $this->getDispatcher()->dispatch($routeMatch, $request);
-        $sesion = $this->container->get(SessionInterface::class);
-        $sesion->start();
+
         return $response;
     }
 
