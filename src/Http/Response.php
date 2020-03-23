@@ -10,7 +10,7 @@ class Response extends Message implements ResponseInterface
     /**
      * @var int
      */
-    private int $statusCode;
+    private $statusCode;
 
     /**
      * Response constructor.
