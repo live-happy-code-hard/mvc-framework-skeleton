@@ -28,6 +28,9 @@ class Session implements SessionInterface
 
     public function get(string $name)
     {
+        if (!isset($_SESSION[$name])){
+            return null;
+        }
         return $_SESSION[$name];
     }
 
