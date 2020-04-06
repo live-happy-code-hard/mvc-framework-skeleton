@@ -25,7 +25,7 @@ abstract class AbstractController
         $this->renderer = $renderer;
     }
 
-    protected function redirect(string $location) : Message
+    protected function redirect(string $location) : Response
     {
         $response = new Response(Stream::createFromString(''));
         $response = $response->withStatus(301);
