@@ -10,18 +10,28 @@ use Framework\Http\Stream;
 
 class Renderer implements RendererInterface
 {
+    /**
+     * @var string
+     */
     private $baseViewsPath;
+
+    /**
+     * @var string
+     */
     private $template;
 
     public function __construct(string $baseViewsPath, string $template)
     {
-        $this->baseViewsPath =$baseViewsPath;
-        $this->template = $template;
+        $this->baseViewsPath = APP_PATH . $baseViewsPath;
+        $this->template = APP_PATH . $template;
     }
 
     /**
-     * @inheritDoc
+     * @param string $viewFile
+     * @param array $arguments
+     * @return Response
      */
+
     public function renderView(string $viewFile, array $arguments): Response
     {
         ob_start();
@@ -43,8 +53,10 @@ class Renderer implements RendererInterface
     }
 
     /**
-     * @inheritDoc
+     * @param array $data
+     * @return Response
      */
+
     public function renderJson(array $data): Response
     {
         $json = json_encode($data);
